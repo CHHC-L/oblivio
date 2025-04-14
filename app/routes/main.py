@@ -2,6 +2,9 @@ from flask import Blueprint, render_template, request, redirect, session
 from app.auth.email import send_verification_email
 from app.auth.validator import validate_email_domain, verify_code
 from app.upload.uploader import handle_upload
+from app import gcs_client
+import os, re
+from collections import defaultdict
 
 main_bp = Blueprint('main', __name__)
 
@@ -46,6 +49,9 @@ def list_projects():
 @main_bp.route('/project/<project_name>')
 @login_required
 def view_project(project_name):
+    if not re.match(r'^[a-zA-Z0-9_.-]+$', project_name):
+        return "Invalid project name", 400
+    
     bucket_name = os.environ.get('GCS_BUCKET_NAME')
     bucket = gcs_client.bucket(bucket_name)
     prefix = f'public/{project_name}/'
@@ -65,3 +71,18 @@ def view_project(project_name):
                            project_name=project_name,
                            readme_content=readme_content,
                            files=sorted(file_list))
+
+@main_bp.route('/project/<project_name>/file/<path:filepath>')
+@login_required
+def view_file(project_name, filepath):
+    if not re.match(r'^[a-zA-Z0-9_.-]+$', project_name):
+        return "Invalid project name", 400
+
+    bucket_name = os.environ.get('GCS_BUCKET_NAME')
+    bucket = gcs_client.bucket(bucket_name)
+    blob_path = f'public/{project_name}/{filepath}'
+    blob = bucket.blob(blob_path)
+    if not blob.exists():
+        return "File not found", 404
+    content = blob.download_as_text()
+    return render_template('file_view.html', project_name=project_name, filepath=filepath, content=content)
