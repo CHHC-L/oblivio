@@ -1,6 +1,10 @@
 from flask import Flask
 from flask_mail import Mail
 from google.cloud import storage
+from google.oauth2 import service_account
+import os
+import json
+
 from .utils.logger import configure_logging
 
 mail = Mail()
@@ -15,8 +19,12 @@ def create_app():
 
     # Initialize extensions
     mail.init_app(app)
+
+    # Initialize GCS client using JSON from environment
     global gcs_client
-    gcs_client = storage.Client()
+    credentials_info = json.loads(os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"])
+    credentials = service_account.Credentials.from_service_account_info(credentials_info)
+    gcs_client = storage.Client(credentials=credentials, project=credentials.project_id)
 
     # Configure logging
     configure_logging(app)
