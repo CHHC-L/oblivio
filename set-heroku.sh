@@ -7,6 +7,8 @@ fi
 
 export $(grep -v '^#' .env | xargs)
 
+##################################################
+
 if [ -z "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
   echo "[Error] GOOGLE_APPLICATION_CREDENTIALS is not defined in .env"
   exit 1
@@ -23,4 +25,15 @@ ESCAPED_JSON=$(python3 -c "import json; print(json.dumps(json.load(open('$JSON_P
 
 echo "Setting GOOGLE_APPLICATION_CREDENTIALS_JSON in Heroku..."
 heroku config:set GOOGLE_APPLICATION_CREDENTIALS_JSON="$ESCAPED_JSON"
+echo "Done!"
+
+##################################################
+
+if [ -z "$WHITELIST_DOMAINS" ]; then
+  echo "[Error] WHITELIST_DOMAINS is not defined in .env"
+  exit 1
+fi
+
+echo "Setting WHITELIST_DOMAINS in Heroku..."
+heroku config:set WHITELIST_DOMAINS="$WHITELIST_DOMAINS"
 echo "Done!"
