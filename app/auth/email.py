@@ -10,7 +10,8 @@ def generate_code(length=6):
 def send_verification_email(email):
     code = generate_code()
     codes[email] = code
-    msg = Message("Your Verification Code", recipients=[email])
+    sender = current_app.config.get("MAIL_USERNAME")
+    msg = Message("Your Verification Code", sender=sender, recipients=[email])
     msg.body = f"Your code is: {code}"
     mail.send(msg)
 
