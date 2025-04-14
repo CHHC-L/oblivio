@@ -19,14 +19,16 @@ def register():
         return "Unauthorized domain", 403
     return render_template('register.html')
 
-@main_bp.route('/verify', methods=['POST'])
+@main_bp.route('/verify', methods=['GET', 'POST'])
 def verify():
-    email = request.form['email']
-    code = request.form['code']
-    if verify_code(email, code):
-        session['user'] = email
-        return redirect('/upload')
-    return "Verification failed", 401
+    if request.method == 'POST':
+        email = request.form['email']
+        code = request.form['code']
+        if verify_code(email, code):
+            session['user'] = email
+            return redirect('/upload')
+        return "Verification failed", 401
+    return render_template('verify.html')
 
 @main_bp.route('/upload', methods=['GET', 'POST'])
 def upload():
