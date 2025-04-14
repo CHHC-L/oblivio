@@ -26,14 +26,42 @@ def verify():
         code = request.form['code']
         if verify_code(email, code):
             session['user'] = email
-            return redirect('/upload')
+            return redirect('/files')
         return "Verification failed", 401
     return render_template('verify.html')
 
-@main_bp.route('/upload', methods=['GET', 'POST'])
-def upload():
-    if 'user' not in session:
-        return redirect('/register')
-    if request.method == 'POST':
-        return handle_upload(request)
-    return render_template('upload.html')
+@main_bp.route('/files')
+@login_required
+def list_projects():
+    bucket_name = os.environ.get('GCS_BUCKET_NAME')
+    bucket = gcs_client.bucket(bucket_name)
+    blobs = bucket.list_blobs(prefix='public/')
+    projects = set()
+    for blob in blobs:
+        parts = blob.name.split('/')
+        if len(parts) > 1 and parts[1]:
+            projects.add(parts[1])
+    return render_template('files.html', projects=sorted(projects))
+
+@main_bp.route('/project/<project_name>')
+@login_required
+def view_project(project_name):
+    bucket_name = os.environ.get('GCS_BUCKET_NAME')
+    bucket = gcs_client.bucket(bucket_name)
+    prefix = f'public/{project_name}/'
+    blobs = bucket.list_blobs(prefix=prefix)
+
+    readme_content = ''
+    file_list = []
+
+    for blob in blobs:
+        rel_path = blob.name[len(prefix):]
+        if rel_path == 'README.md':
+            readme_content = blob.download_as_text()
+        elif rel_path:
+            file_list.append(rel_path)
+
+    return render_template('project.html',
+                           project_name=project_name,
+                           readme_content=readme_content,
+                           files=sorted(file_list))

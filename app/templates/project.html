@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><title>{{ project_name }}</title></head>
+<body>
+  <h2>Project: {{ project_name }}</h2>
+
+  <h3>README.md</h3>
+  <pre>{{ readme_content }}</pre>
+
+  <h3>Files</h3>
+  <ul>
+    {% for file in files %}
+      <li>{{ file }}</li>
+    {% endfor %}
+  </ul>
+
+  <a href="/files">← Back to project list</a>
+</body>
+</html>
