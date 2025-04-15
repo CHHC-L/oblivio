@@ -2,23 +2,68 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
     <title>{{ project_name }}</title>
+    <!-- 引入独立文件树的CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filetree.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Left sidebar: file tree */
+        .sidebar {
+            width: 25%;
+            background-color: #f9f9f9;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        /* right side: project README content */
+        .content {
+            width: 75%;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>Project: {{ project_name }}</h2>
-
-    <h3>README.md</h3>
-    <pre>{{ readme_content }}</pre>
-
-    <h3>File Tree</h3>
-    <ul>
-        {% for path in files %}
-        <li><a href="/project/{{ project_name }}/file/{{ path }}">{{ path }}</a></li>
-        {% endfor %}
-    </ul>
-
-    <a href="/files">← Back to project list</a>
+    <div class="container">
+        <!-- Left sidebar: file tree -->
+        <aside class="sidebar">
+            <h3>File Tree</h3>
+            <div class="file-tree">
+                <ul>
+                    {% for f in files %}
+                    <li>
+                        <a href="{{ url_for('main.view_file', project_name=project_name, filepath=f) }}">{{ f }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <p>
+                <a href="/files">← Back to project list</a>
+            </p>
+        </aside>
+        <!-- Right side: project README content -->
+        <main class="content">
+            <h2>Project: {{ project_name }}</h2>
+            <h3>README.md</h3>
+            <div id="readme">
+                {{ readme_content | safe }}
+            </div>
+        </main>
+    </div>
 </body>
 
 </html>

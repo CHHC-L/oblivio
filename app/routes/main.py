@@ -5,6 +5,7 @@ from app.upload.uploader import handle_upload
 from app.utils.decorator import login_required
 from app import gcs_client
 import os, re
+import markdown2
 from collections import defaultdict
 
 main_bp = Blueprint('main', __name__)
@@ -67,7 +68,8 @@ def view_project(project_name):
         rel_path = blob.name[len(prefix):]
         lower_path = rel_path.lower()
         if lower_path == 'readme' or lower_path.startswith('readme.'):
-            readme_content = blob.download_as_text()
+            readme_raw = blob.download_as_text()
+            readme_content = markdown2.markdown(readme_raw)
         if rel_path:
             file_list.append(rel_path)
             print(f"[GCS] view_project({project_name}) -> rel_path: {blob.name}")

@@ -1,0 +1,19 @@
+/* filetree.css */
+.file-tree ul {
+    list-style: none;
+    padding-left: 20px;
+    margin: 0;
+}
+
+.file-tree li {
+    margin-bottom: 5px;
+}
+
+.file-tree a {
+    text-decoration: none;
+    color: #007BFF;
+}
+
+.file-tree a:hover {
+    text-decoration: underline;
+}
