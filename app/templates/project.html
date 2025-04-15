@@ -13,7 +13,7 @@
 
     <h3>File Tree</h3>
     <ul>
-        {% for path in file_tree %}
+        {% for path in files %}
         <li><a href="/project/{{ project_name }}/file/{{ path }}">{{ path }}</a></li>
         {% endfor %}
     </ul>
