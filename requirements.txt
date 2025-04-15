@@ -3,3 +3,4 @@ Flask-Mail
 google-cloud-storage
 gunicorn
 python-dotenv
+markdown2
