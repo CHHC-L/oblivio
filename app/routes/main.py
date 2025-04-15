@@ -101,4 +101,18 @@ def view_file(project_name, filepath):
     if not blob.exists():
         return "File not found", 404
     content = blob.download_as_text()
-    return render_template('file_view.html', project_name=project_name, filepath=filepath, content=content)
+    
+    prefix = f'{project_name}/'
+    blobs = bucket.list_blobs(prefix=prefix)
+    file_list = []
+    for blob in blobs:
+        rel_path = blob.name[len(prefix):]
+        if rel_path:
+            file_list.append(rel_path)
+            print(f"[GCS] view_file({project_name}, {filepath}) -> rel_path: {blob.name}")
+    
+    return render_template('file_view.html',
+                           project_name=project_name,
+                           filepath=filepath,
+                           files=sorted(file_list),
+                           content=content)
