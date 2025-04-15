@@ -1,12 +1,14 @@
 # Oblivio
 
-A lightweight, private code upload platform designed for code storage & display with access control. It provides a streamlined mechanism to upload code files, verify visitors' identity via email, and store them in cloud storage (Google Cloud Storage).
+A lightweight, private code upload platform designed for code storage & display with access control.
 
-Only visitors with whitelisted email domains (configured by user) are allowed to access the system.
+From the owner's side, it provides a simple script to upload files to a Google Cloud Storage bucket.
+
+From the visitors' side, it verifies visitors' identity via email, and allows specific visitors to view the uploaded files. Only visitors with whitelisted email domains (configured by owner) are allowed to access the system.
 
 ---
 
-## Features (Developping)
+## Features
 
 - **Email Whitelist Verification**  
   Login and registration are restricted to users from approved domains via email verification codes.
@@ -30,20 +32,22 @@ Only visitors with whitelisted email domains (configured by user) are allowed to
 - Send 6-digit verification code via email.
 - Establish session/token after successful verification.
 
-### 2. File Upload
+### 2. Showcase
 
-- Accepts single-file uploads (future-ready for batch support).
-- Validates file size and type before upload.
+- Display uploaded files to verified users.
+- Provide a simple interface to view files.
+
+### 3. File Upload
+
 - Transfers files to a configured GCS bucket.
-- Generates and returns a storage URL or internal reference.
 
-### 3. Configuration & Logging
+### 4. Configuration & Logging
 
 - Uses `.env` for environment settings.
 
 ---
 
-## Testing
+## Testing (to be done)
 
 Unit tests under the `tests/` directory.
 
@@ -58,5 +62,13 @@ pytest tests/
 Deployment is streamlined for Heroku.  
 Use the provided `.env.template` to configure environment variables.
 
-Detailed deployment instructions are available internally.
-
+Basically:
+1. Create a new Heroku app and config it.
+2. Set up Google Cloud Storage and service account.
+    - Create a GCS bucket, deal with permissions, generate credentials and fill in your local `.env` file.
+    - Upload files on GCS web interface, or use `upload-to-gcs.sh` script.
+3. Create an email account for sending verification codes. 
+    - If use gmail, set up "less secure app access" and generate an app password.
+    - Then fill in your local `.env` file with email credentials.
+4. Get the `.env` ready and run `set-heroku.sh`, which will set the environment variables in Heroku.
+5. Push the code to Heroku and run the app.
