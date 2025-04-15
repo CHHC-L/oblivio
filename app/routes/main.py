@@ -77,7 +77,7 @@ def view_project(project_name):
                            readme_content=readme_content,
                            files=sorted(file_list))
 
-@main_bp.route('/project/<project_name>/file/<filepath>')
+@main_bp.route('/project/<project_name>/file/<path:filepath>')
 @login_required
 def view_file(project_name, filepath):
     if not re.match(r'^[a-zA-Z0-9_.-]+$', project_name):
@@ -85,7 +85,7 @@ def view_file(project_name, filepath):
 
     bucket_name = os.environ.get('GCS_BUCKET_NAME')
     bucket = gcs_client.bucket(bucket_name)
-    blob_path = f'public/{project_name}/{filepath}'
+    blob_path = f'{project_name}/{filepath}'
     blob = bucket.blob(blob_path)
     if not blob.exists():
         return "File not found", 404
