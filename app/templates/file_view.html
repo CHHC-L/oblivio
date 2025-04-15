@@ -2,13 +2,83 @@
 <html>
 
 <head>
-    <title>{{ filepath }}</title>
+    <meta charset="UTF-8">
+    <title>{{ project_name }} - {{ filepath }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filetree.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Left sidebar: file tree */
+        .sidebar {
+            width: 25%;
+            background-color: #f9f9f9;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        /* right side: project README content */
+        .content {
+            width: 75%;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-header {
+            font-size: 0.9em;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .file-display {
+            flex-grow: 1;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>{{ filepath }}</h2>
-    <pre>{{ content }}</pre>
-    <a href="/project/{{ project_name }}">← Back to project</a>
+    <div class="container">
+        <!-- Left sidebar: file tree -->
+        <aside class="sidebar">
+            <h3>File Tree</h3>
+            <div class="file-tree">
+                <ul>
+                    {% for f in files %}
+                    <li>
+                        <a href="{{ url_for('main.view_file', project_name=project_name, filepath=f) }}">
+                            {{ f }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <p>
+                <a href="{{ url_for('main.project', project_name=project_name) }}">← Back to project overview</a>
+            </p>
+        </aside>
+        <!-- Right side: file content -->
+        <main class="content">
+            <div class="project-header">
+                Project: {{ project_name }} - {{ filepath }}
+            </div>
+            <div class="file-display">
+                <pre>{{ content }}</pre>
+            </div>
+        </main>
+    </div>
 </body>
 
 </html>
