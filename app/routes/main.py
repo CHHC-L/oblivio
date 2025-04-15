@@ -65,9 +65,10 @@ def view_project(project_name):
 
     for blob in blobs:
         rel_path = blob.name[len(prefix):]
-        if rel_path == 'README.md':
+        lower_path = rel_path.lower()
+        if lower_path == 'readme' or lower_path.startswith('readme.'):
             readme_content = blob.download_as_text()
-        elif rel_path:
+        if rel_path:
             file_list.append(rel_path)
 
     return render_template('project.html',
