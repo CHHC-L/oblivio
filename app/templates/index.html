@@ -2,12 +2,70 @@
 <html>
 
 <head>
-    <title>Welcome</title>
+    <meta charset="UTF-8">
+    <title>Oblivio</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Left sidebar: register/login */
+        .sidebar {
+            width: 25%;
+            background-color: #f9f9f9;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        /* right side: about page */
+        .content {
+            width: 75%;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .about-header {
+            font-size: 1em;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .readme-content {
+            flex-grow: 1;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>Private Code Hosting</h2>
-    <a href="/register">Register / Login</a>
+    <div class="container">
+        <!-- Left sidebar: register/login -->
+        <aside class="sidebar">
+            <h2>Oblivio</h2>
+            <a href="/register">Register / Login</a>
+        </aside>
+
+        <!-- Right side: about page -->
+        <main class="content">
+            <div class="about-header">
+                About
+            </div>
+            <div class="readme-content">
+                {{ readme_content | safe }}
+            </div>
+        </main>
+    </div>
 </body>
 
 </html>

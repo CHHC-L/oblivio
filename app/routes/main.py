@@ -12,7 +12,24 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def home():
-    return render_template('index.html')
+    readme_content = ""
+    readme_path = os.path.join(os.getcwd(), "README.md")
+    try:
+        with open(readme_path, "r", encoding="utf-8") as f:
+            readme_raw = f.read()
+            readme_content = markdown2.markdown(readme_raw, extras=[
+                    "tables",
+                    "fenced-code-blocks",
+                    "toc",
+                    "header-ids",
+                    "strike",        
+                    "cuddled-lists", 
+                    "footnotes",     
+                    "code-friendly"
+                ])
+    except Exception as e:
+        readme_content = "<p>README.md not available</p>"
+    return render_template('index.html', readme_content=readme_content)
 
 @main_bp.route('/register', methods=['GET', 'POST'])
 def register():
