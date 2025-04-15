@@ -2,6 +2,10 @@
 
 ## [**Click here to view my not-too-public projects on Oblivio app!**](https://oblivio-3c793b380c34.herokuapp.com/)
 
+(Users from mainland China might need some mogic to access the app as it is deployed on Heroku. Sry about that.)
+
+---
+
 A lightweight, private code upload platform designed for code storage & display with access control.
 
 From the owner's side, it provides a simple script to upload files to a Google Cloud Storage bucket.
