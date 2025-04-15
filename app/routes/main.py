@@ -69,7 +69,16 @@ def view_project(project_name):
         lower_path = rel_path.lower()
         if lower_path == 'readme' or lower_path.startswith('readme.'):
             readme_raw = blob.download_as_text()
-            readme_content = markdown2.markdown(readme_raw)
+            readme_content = markdown2.markdown(readme_raw, extras=[
+                "tables",
+                "fenced-code-blocks",
+                "toc",
+                "header-ids",
+                "strike",        
+                "cuddled-lists", 
+                "footnotes",     
+                "code-friendly"
+            ])
         if rel_path:
             file_list.append(rel_path)
             print(f"[GCS] view_project({project_name}) -> rel_path: {blob.name}")
