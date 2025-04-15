@@ -42,7 +42,7 @@ def list_projects():
     blobs = bucket.list_blobs()
     projects = set()
     for blob in blobs:
-        print(f"[GCS] list_projects() -> Blob: {blob.name}")
+        print(f"[GCS] list_projects() -> blob: {blob.name}")
         if '/' in blob.name:
             project_name = blob.name.split('/', 1)[0]
             if project_name:
@@ -70,6 +70,7 @@ def view_project(project_name):
             readme_content = blob.download_as_text()
         if rel_path:
             file_list.append(rel_path)
+            print(f"[GCS] view_project({project_name}) -> rel_path: {blob.name}")
 
     return render_template('project.html',
                            project_name=project_name,
