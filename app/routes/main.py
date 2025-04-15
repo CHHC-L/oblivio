@@ -42,6 +42,7 @@ def list_projects():
     blobs = bucket.list_blobs()
     projects = set()
     for blob in blobs:
+        print(f"[GCS] list_projects() -> Blob: {blob.name}")
         parts = blob.name.split('/')
         if len(parts) > 1 and parts[1]:
             projects.add(parts[1])
