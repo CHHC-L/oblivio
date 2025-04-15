@@ -77,7 +77,7 @@ def view_project(project_name):
                            readme_content=readme_content,
                            files=sorted(file_list))
 
-@main_bp.route('/project/<project_name>/file/<path:filepath>')
+@main_bp.route('/project/<project_name>/file/<filepath>')
 @login_required
 def view_file(project_name, filepath):
     if not re.match(r'^[a-zA-Z0-9_.-]+$', project_name):
