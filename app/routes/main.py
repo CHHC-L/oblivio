@@ -43,9 +43,10 @@ def list_projects():
     projects = set()
     for blob in blobs:
         print(f"[GCS] list_projects() -> Blob: {blob.name}")
-        parts = blob.name.split('/')
-        if len(parts) > 1 and parts[1]:
-            projects.add(parts[1])
+        if '/' in blob.name:
+            project_name = blob.name.split('/', 1)[0]
+            if project_name:
+                projects.add(project_name)
     return render_template('files.html', projects=sorted(projects))
 
 @main_bp.route('/project/<project_name>')
