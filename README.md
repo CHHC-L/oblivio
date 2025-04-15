@@ -29,7 +29,7 @@ From the visitors' side, it verifies visitors' identity via email, and allows sp
 ### 1. Auth (Email Verification)
 
 - Check email domain against a predefined whitelist.
-- Send 6-digit verification code via email.
+- Send verification code via email.
 - Establish session/token after successful verification.
 
 ### 2. Showcase
