@@ -57,7 +57,7 @@ def view_project(project_name):
     
     bucket_name = os.environ.get('GCS_BUCKET_NAME')
     bucket = gcs_client.bucket(bucket_name)
-    prefix = f'public/{project_name}/'
+    prefix = f'{project_name}/'
     blobs = bucket.list_blobs(prefix=prefix)
 
     readme_content = ''
