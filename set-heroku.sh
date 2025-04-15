@@ -8,7 +8,7 @@ fi
 export $(grep -v '^#' .env | xargs)
 
 ##################################################
-# Google Application Credentials
+# Google Cloud Storage
 ##################################################
 
 if [ -z "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
@@ -27,6 +27,15 @@ ESCAPED_JSON=$(python3 -c "import json; print(json.dumps(json.load(open('$JSON_P
 
 echo "Setting GOOGLE_APPLICATION_CREDENTIALS_JSON in Heroku..."
 heroku config:set GOOGLE_APPLICATION_CREDENTIALS_JSON="$ESCAPED_JSON"
+echo "Done!"
+
+if [ -z "$GCS_BUCKET_NAME" ]; then
+  echo "[Error] GCS_BUCKET_NAME is not defined in .env"
+  exit 1
+fi
+
+echo "Setting GCS_BUCKET_NAME in Heroku..."
+heroku config:set GCS_BUCKET_NAME="$GCS_BUCKET_NAME"
 echo "Done!"
 
 ##################################################

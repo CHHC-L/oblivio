@@ -39,7 +39,7 @@ def verify():
 def list_projects():
     bucket_name = os.environ.get('GCS_BUCKET_NAME')
     bucket = gcs_client.bucket(bucket_name)
-    blobs = bucket.list_blobs(prefix='public/')
+    blobs = bucket.list_blobs()
     projects = set()
     for blob in blobs:
         parts = blob.name.split('/')
